@@ -6,27 +6,41 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Display implements View.OnClickListener {
-    private TextView display;
+    private final TextView display;
 
     public Display(TextView t) {
         display = t;
     }
 
+    private void showInScreen(CharSequence sequence) {
+        String textInScreen = display.getText().toString();
+
+        if (TextUtils.isEmpty(textInScreen)) { // If screen is empty write on it
+            display.setText(sequence);
+        } else {
+            if (!textInScreen.contentEquals("0") || !sequence.toString().contentEquals("0")) { // Avoid left zeros
+                String toDisplay = textInScreen + sequence;
+                display.setText(toDisplay);
+            }
+        }
+    }
+
     @Override
     public void onClick(View view) {
         Button button = (Button) view;
-        if (button.getId() == R.id.remove) {
+        int buttonID = button.getId();
+
+        if (buttonID == R.id.remove) {
             removeOne();
         } else {
-            CharSequence cs = display.getText();
-            cs = cs + button.getText().toString();
-            display.setText(cs);
+            CharSequence cs = button.getText();
+            showInScreen(cs);
         }
     }
 
     public void removeOne() {
         CharSequence cs = display.getText();
-        if (!TextUtils.isEmpty(cs)){
+        if (!TextUtils.isEmpty(cs)) {
             cs = cs.subSequence(0, cs.length() - 1);
             display.setText(cs);
         }
