@@ -7,8 +7,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private TextView display;
-    private Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9;
+    private Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bp;
     private Button br, bc;
 
     private Calculator calculator;
@@ -21,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         calculator = new Calculator();
-        //display = findViewById(R.id.display);
         display = new Display(findViewById(R.id.display));
+
         b0 = findViewById(R.id.button0);
         b1 = findViewById(R.id.button1);
         b2 = findViewById(R.id.button2);
@@ -33,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         b7 = findViewById(R.id.button7);
         b8 = findViewById(R.id.button8);
         b9 = findViewById(R.id.button9);
+        bp = findViewById(R.id.buttonPoint);
+
         br = findViewById(R.id.remove);
-        // b1.setOnClickListener(this);
-        // b2.setOnClickListener(this);
+        bc = findViewById(R.id.clear);
+
         b0.setOnClickListener(display);
         b1.setOnClickListener(display);
         b2.setOnClickListener(display);
@@ -46,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
         b7.setOnClickListener(display);
         b8.setOnClickListener(display);
         b9.setOnClickListener(display);
+        bp.setOnClickListener(display);
 
         br.setOnClickListener(display);
+        bc.setOnClickListener(display);
     }
 
 }

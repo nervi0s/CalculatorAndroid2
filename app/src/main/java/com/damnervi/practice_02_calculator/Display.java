@@ -12,13 +12,19 @@ public class Display implements View.OnClickListener {
         display = t;
     }
 
-    private void showInScreen(CharSequence sequence) {
+    private void showScreenController(CharSequence sequence) {
         String textInScreen = display.getText().toString();
 
         if (TextUtils.isEmpty(textInScreen)) { // If screen is empty write on it
-            display.setText(sequence);
+            if (sequence.toString().contentEquals(".")) { // Set 0. if the first pressed button is point
+                display.setText("0.");
+            } else {
+                display.setText(sequence);
+            }
         } else {
-            if (!textInScreen.contentEquals("0") || !sequence.toString().contentEquals("0")) { // Avoid left zeros
+            if (textInScreen.contains(".") && sequence.toString().contains(".")) {
+
+            } else if (!textInScreen.contentEquals("0") || !sequence.toString().contentEquals("0")) { // Avoid left zeros
                 String toDisplay = textInScreen + sequence;
                 display.setText(toDisplay);
             }
@@ -32,9 +38,11 @@ public class Display implements View.OnClickListener {
 
         if (buttonID == R.id.remove) {
             removeOne();
+        } else if (buttonID == R.id.clear) {
+            clearScreen();
         } else {
             CharSequence cs = button.getText();
-            showInScreen(cs);
+            showScreenController(cs);
         }
     }
 
