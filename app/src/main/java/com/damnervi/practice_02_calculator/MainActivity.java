@@ -9,9 +9,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bp;
     private Button br, bc;
+    private Button buttonAdd;
 
     private Calculator calculator;
-
     private Display display;
 
     @Override
@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calculator = new Calculator();
         display = new Display(findViewById(R.id.display));
+        calculator = new Calculator(display);
 
         b0 = findViewById(R.id.button0);
         b1 = findViewById(R.id.button1);
@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         br = findViewById(R.id.remove);
         bc = findViewById(R.id.clear);
 
+        buttonAdd = findViewById(R.id.buttonAdd);
+
         b0.setOnClickListener(display);
         b1.setOnClickListener(display);
         b2.setOnClickListener(display);
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         br.setOnClickListener(display);
         bc.setOnClickListener(display);
+
+        buttonAdd.setOnClickListener(calculator);
     }
 
 }

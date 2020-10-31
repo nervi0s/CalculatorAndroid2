@@ -1,18 +1,24 @@
 package com.damnervi.practice_02_calculator;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class Display implements View.OnClickListener {
-    private final TextView display;
+
+    protected final TextView display;
 
     public Display(TextView t) {
         display = t;
     }
 
-    private void showScreenController(CharSequence sequence) {
+    public TextView getDisplay() {
+        return display;
+    }
+
+    public void showScreenController(CharSequence sequence) {
         String textInScreen = display.getText().toString();
 
         if (TextUtils.isEmpty(textInScreen)) { // If screen is empty write on it
@@ -22,9 +28,14 @@ public class Display implements View.OnClickListener {
                 display.setText(sequence);
             }
         } else {
-            if (textInScreen.contains(".") && sequence.toString().contains(".")) {
-
-            } else if (!textInScreen.contentEquals("0") || !sequence.toString().contentEquals("0")) { // Avoid left zeros
+            boolean isPointPresent = textInScreen.contains(".");
+            boolean isTryingAddPoint = sequence.toString().contentEquals(".");
+            boolean startWithZero = textInScreen.contentEquals("0");
+            boolean isTryingAddZero = sequence.toString().contentEquals("0");
+            // toDO: Add method to remove any symbol (+,-,*,/) if one of them is present before show a numbers in screen
+            if (isPointPresent && isTryingAddPoint) { // Avoid points repetitions
+                Log.i("msgInfo", "Point already present");
+            } else if (!startWithZero || !isTryingAddZero) { // Avoid left zeros
                 String toDisplay = textInScreen + sequence;
                 display.setText(toDisplay);
             }
@@ -56,5 +67,10 @@ public class Display implements View.OnClickListener {
 
     public void clearScreen() {
         display.setText("");
+    }
+
+    public boolean isEmptyScreen() {
+        String textInScreen = display.getText().toString();
+        return textInScreen.isEmpty();
     }
 }
