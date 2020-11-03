@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        display = new Display(findViewById(R.id.display));
+        display = new Display(findViewById(R.id.display), findViewById(R.id.displaysecondary));
         calculator = new Calculator(display);
-
+        display.setCalculator(calculator);
         // Numeric buttons
         b0 = findViewById(R.id.button0);
         b1 = findViewById(R.id.button1);
