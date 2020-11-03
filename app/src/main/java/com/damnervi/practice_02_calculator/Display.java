@@ -1,6 +1,5 @@
 package com.damnervi.practice_02_calculator;
 
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 public class Display implements View.OnClickListener {
 
     protected final TextView display;
+    protected boolean newWrite = true;
 
     public Display(TextView t) {
         display = t;
@@ -18,28 +18,41 @@ public class Display implements View.OnClickListener {
         return display;
     }
 
-    public void showScreenController(CharSequence sequence) {
-        String textInScreen = display.getText().toString();
+    public void screenController(CharSequence sequence) {
 
-        if (TextUtils.isEmpty(textInScreen)) { // If screen is empty write on it
-            if (sequence.toString().contentEquals(".")) { // Set 0. if the first pressed button is point
-                display.setText("0.");
+        String textInScreen = display.getText().toString();
+        boolean isPointPresent = textInScreen.contains(".");
+        boolean isTryingAddPoint = sequence.toString().contentEquals(".");
+        boolean startWithZero = textInScreen.contentEquals("0");
+        boolean isSymbolPresent = textInScreen.matches("[+x/#-]");
+
+        if (isEmptyScreen() || newWrite) { // Initialize the screen if It's empty
+            if (isTryingAddPoint) { // Set 0. if the first pressed button is point
+                writeOnScreen("0.");
             } else {
-                display.setText(sequence);
+                writeOnScreen(sequence);
             }
         } else {
-            boolean isPointPresent = textInScreen.contains(".");
-            boolean isTryingAddPoint = sequence.toString().contentEquals(".");
-            boolean startWithZero = textInScreen.contentEquals("0");
-            boolean isTryingAddZero = sequence.toString().contentEquals("0");
-            // toDO: Add method to remove any symbol (+,-,*,/) if one of them is present before show a numbers in screen
-            if (isPointPresent && isTryingAddPoint) { // Avoid points repetitions
+            if (isSymbolPresent) {
+                if (isTryingAddPoint) {
+                    writeOnScreen("0.");
+                } else {
+                    writeOnScreen(sequence);
+                }
+            } else if (isPointPresent && isTryingAddPoint) { // Avoid points repetitions
                 Log.i("msgInfo", "Point already present");
-            } else if (!startWithZero || !isTryingAddZero) { // Avoid left zeros
+            } else if (startWithZero) { // Avoid left zeros
+                if (isTryingAddPoint) {
+                    writeOnScreen("0.");
+                } else {
+                    writeOnScreen(sequence);
+                }
+            } else {
                 String toDisplay = textInScreen + sequence;
-                display.setText(toDisplay);
+                writeOnScreen(toDisplay);
             }
         }
+        newWrite = false;
     }
 
     @Override
@@ -53,24 +66,34 @@ public class Display implements View.OnClickListener {
             clearScreen();
         } else {
             CharSequence cs = button.getText();
-            showScreenController(cs);
+            screenController(cs);
         }
     }
 
     public void removeOne() {
-        CharSequence cs = display.getText();
-        if (!TextUtils.isEmpty(cs)) {
-            cs = cs.subSequence(0, cs.length() - 1);
-            display.setText(cs);
+        String textInScreen = display.getText().toString();
+        boolean isSymbolPresent = textInScreen.toString().matches("[+x/#-]");
+        if (!isEmptyScreen() && !isSymbolPresent) {
+            textInScreen = textInScreen.substring(0, textInScreen.length() - 1);
+            writeOnScreen(textInScreen);
         }
     }
 
     public void clearScreen() {
-        display.setText("");
+        String textInScreen = display.getText().toString();
+        boolean isSymbolPresent = textInScreen.matches("[+x/#-]");
+        if (!isSymbolPresent) {
+            writeOnScreen("");
+        }
     }
 
     public boolean isEmptyScreen() {
         String textInScreen = display.getText().toString();
         return textInScreen.isEmpty();
     }
+
+    public void writeOnScreen(CharSequence cs) {
+        display.setText(cs);
+    }
+    
 }

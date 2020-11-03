@@ -10,6 +10,9 @@ public class MainActivity extends AppCompatActivity {
     private Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bp;
     private Button br, bc;
     private Button buttonAdd;
+    private Button buttonMulti;
+    private Button buttonResult;
+
 
     private Calculator calculator;
     private Display display;
@@ -38,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         bc = findViewById(R.id.clear);
 
         buttonAdd = findViewById(R.id.buttonAdd);
+        buttonMulti = findViewById(R.id.buttonMulti);
+
+        buttonResult = findViewById(R.id.result);
 
         b0.setOnClickListener(display);
         b1.setOnClickListener(display);
@@ -55,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         bc.setOnClickListener(display);
 
         buttonAdd.setOnClickListener(calculator);
+        buttonMulti.setOnClickListener(calculator);
+
+        buttonResult.setOnClickListener(calculator);
     }
 
 }
