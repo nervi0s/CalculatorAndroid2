@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 public class Display implements View.OnClickListener {
 
-    protected final TextView display;
+    private final TextView display;
     protected boolean newWrite = true;
 
     public Display(TextView t) {
@@ -95,5 +95,4 @@ public class Display implements View.OnClickListener {
     public void writeOnScreen(CharSequence cs) {
         display.setText(cs);
     }
-    
 }

@@ -1,9 +1,7 @@
 package com.damnervi.practice_02_calculator;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 
 public class Calculator implements View.OnClickListener {
 
@@ -18,13 +16,9 @@ public class Calculator implements View.OnClickListener {
     }
 
     public void assignValues() {
-        String textInScreen = display.getDisplay().getText().toString();
-        if (isNumber(textInScreen)) { // texto que hay en ella es un numero
-            numberInScreen = Double.parseDouble(display.getDisplay().getText().toString());
-            if (waitingNumber == null) {
-                waitingNumber = numberInScreen;
-            }
-            Log.i("msgInfo", " " + numberInScreen + " " + waitingNumber);
+        numberInScreen = Double.parseDouble(display.getDisplay().getText().toString());
+        if (waitingNumber == null) {
+            waitingNumber = numberInScreen;
         }
     }
 
@@ -37,7 +31,7 @@ public class Calculator implements View.OnClickListener {
             assignValues();
             if (buttonID == R.id.result) {
                 resolveOperation();
-                Log.i("msgInfo", "Button = pulsed");
+                waitingNumber = null;
             } else {
                 setOperation(buttonID);
             }
@@ -49,36 +43,37 @@ public class Calculator implements View.OnClickListener {
         if (buttonID == R.id.buttonAdd) {
             operation = "add";
             display.newWrite = true;
+        } else if (buttonID == R.id.buttonSubtract) {
+            operation = "subtract";
+            display.newWrite = true;
         } else if (buttonID == R.id.buttonMulti) {
             operation = "multi";
+            display.newWrite = true;
+        } else if (buttonID == R.id.buttonDivide) {
+            operation = "divide";
             display.newWrite = true;
         }
     }
 
     public void resolveOperation() {
-        Log.i("msgInfo", " " + numberInScreen + " " + waitingNumber);
+        double result = 0;
         if (operation != null) {
             if (operation.equals("add")) {
-
-                display.getDisplay().setText("" + (numberInScreen + waitingNumber));
-                waitingNumber = numberInScreen + waitingNumber;
-                operation = null;
-
+                result = numberInScreen + waitingNumber;
+                display.writeOnScreen(String.valueOf(result));
+            } else if (operation.equals("subtract")) {
+                result = waitingNumber - numberInScreen;
+                display.writeOnScreen(String.valueOf(result));
             } else if (operation.equals("multi")) {
-                display.getDisplay().setText("" + (numberInScreen * waitingNumber));
-                waitingNumber = numberInScreen * waitingNumber;
-                operation = null;
+                result = numberInScreen * waitingNumber;
+                display.writeOnScreen(String.valueOf(result));
+            } else if (operation.equals("divide")) {
+                result = waitingNumber / numberInScreen;
+                display.writeOnScreen(String.valueOf(result));
             }
+            waitingNumber = result;
+            operation = null;
             display.newWrite = true;
-        }
-    }
-
-    public boolean isNumber(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
         }
     }
 }
