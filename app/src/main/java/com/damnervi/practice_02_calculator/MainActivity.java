@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonResult;
     private Calculator calculator;
     private Display display;
+    private final int[] displayClassButtonsIDs = {R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5,
+            R.id.button6, R.id.button7, R.id.button8, R.id.button9, R.id.buttonPoint, R.id.remove, R.id.clear};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
         calculator = new Calculator(display);
         display.setCalculator(calculator);
         // Numeric buttons
+        for (int id : displayClassButtonsIDs) {
+            findViewById(id).setOnClickListener(display);
+        }
         b0 = findViewById(R.id.button0);
         b1 = findViewById(R.id.button1);
         b2 = findViewById(R.id.button2);
