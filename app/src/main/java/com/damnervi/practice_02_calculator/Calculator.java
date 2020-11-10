@@ -6,12 +6,14 @@ import android.widget.Button;
 public class Calculator implements View.OnClickListener {
 
     private final Display display;
-    private Double numberInScreen = null;
+
+    private Double inScreenNumber = null;
     private Double waitingNumber = null;
     private String operation = null;
+
     // The following members variables are used to avoid errors controlling the flow of the users inputs
     protected boolean operationResolved = false;
-    protected boolean buttonEqualPressed = false;
+    protected boolean buttonEqualsPressed = false;
     protected boolean buttonOperationPressed = false;
 
     // Constructor to initialize this object with Display data type
@@ -27,11 +29,17 @@ public class Calculator implements View.OnClickListener {
         if (!display.isEmptyScreen()) {
             assignValues();
             if (buttonID == R.id.result) {
-                buttonEqualPressed = true;
+                buttonEqualsPressed = true;
                 display.writeOnSecondaryScreen(""); // To remove the secondary screen when equals button is pressed
+                inScreenNumber = Double.parseDouble(display.readMainDisplay());
                 resolveOperation();
+                resetValues();
             } else {
-                buttonEqualPressed = false;
+                if (display.allowWriteInScreenNumber) {
+                    inScreenNumber = Double.parseDouble(display.readMainDisplay());
+                    display.allowWriteInScreenNumber = false;
+                }
+                buttonEqualsPressed = false;
                 buttonOperationPressed = true;
                 display.writeOnSecondaryScreen(display.readMainDisplay());
                 setOperation(buttonID);
@@ -43,15 +51,25 @@ public class Calculator implements View.OnClickListener {
         waitingNumber = d;
     }
 
+    public Double getInScreenNumber() {
+        return inScreenNumber;
+    }
+
+    public Double getWaitingNumber() {
+        return waitingNumber;
+    }
+
     public void assignValues() {
-        numberInScreen = Double.parseDouble(display.readMainDisplay());
         if (waitingNumber == null) {
-            waitingNumber = numberInScreen;
+            waitingNumber = Double.parseDouble(display.readMainDisplay());
         }
     }
 
     public void setOperation(int buttonID) {
-        resolveOperation();
+        if (inScreenNumber != null) {
+            resolveOperation();
+
+        }
         if (buttonID == R.id.buttonAdd) {
             operation = "+";
             display.overWritable = true;
@@ -67,36 +85,47 @@ public class Calculator implements View.OnClickListener {
         }
 
         display.writeOnSecondaryScreen(display.readMainDisplay() + operation);
-        if (buttonEqualPressed) {
+        if (buttonEqualsPressed) {
             display.writeOnSecondaryScreen("");
         }
     }
 
     public void resolveOperation() {
         double result = 0;
-        if (operation != null) {
+        if (operation != null && inScreenNumber != null) {
             switch (operation) {
                 case "+":
-                    result = numberInScreen + waitingNumber;
+                    result = inScreenNumber + waitingNumber;
                     display.writeOnMainScreen(String.valueOf(result));
                     break;
                 case "-":
-                    result = waitingNumber - numberInScreen;
+                    result = waitingNumber - inScreenNumber;
                     display.writeOnMainScreen(String.valueOf(result));
                     break;
                 case "×":
-                    result = numberInScreen * waitingNumber;
+                    result = inScreenNumber * waitingNumber;
                     display.writeOnMainScreen(String.valueOf(result));
                     break;
                 case "÷":
-                    result = waitingNumber / numberInScreen;
+                    result = waitingNumber / inScreenNumber;
                     display.writeOnMainScreen(String.valueOf(result));
                     break;
             }
             waitingNumber = result;
+            inScreenNumber = null;
+            display.allowWriteInScreenNumber = false;
             operation = null;
             operationResolved = true;
             display.overWritable = true;
         }
+    }
+
+    private void resetValues() {
+        inScreenNumber = null;
+        waitingNumber = null;
+        operation = null;
+        operationResolved = false;
+        buttonEqualsPressed = false;
+        buttonOperationPressed = false;
     }
 }

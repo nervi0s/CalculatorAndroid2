@@ -9,8 +9,11 @@ public class Display implements View.OnClickListener {
 
     private final TextView mainDisplay;
     private final TextView secondaryDisplay;
+
     private Calculator calculator;
+
     protected boolean overWritable = true;
+    protected boolean allowWriteInScreenNumber = false;
 
     // Constructor
     public Display(TextView mainDisplay, TextView secondaryDisplay) {
@@ -52,15 +55,20 @@ public class Display implements View.OnClickListener {
 
     // Method to control the information that appears in the main screen
     public void screenController(CharSequence sequence) {
+
         String textInScreen = readMainDisplay();
         boolean isPointPresent = textInScreen.contains(".");
         boolean isTryingAddPoint = sequence.toString().contentEquals(".");
         boolean startWithZero = textInScreen.contentEquals("0");
+
         // Statements used to avoid errors controlling the flow of the users inputs
-        if (calculator.operationResolved && calculator.buttonEqualPressed && calculator.buttonOperationPressed) {
+        if (calculator.getWaitingNumber() != null && calculator.getInScreenNumber() == null) {
+            allowWriteInScreenNumber = true;
+        }
+        if (calculator.operationResolved && calculator.buttonEqualsPressed && calculator.buttonOperationPressed) {
             calculator.setWaitingNumber(null);
             calculator.operationResolved = false;
-            calculator.buttonEqualPressed = false;
+            calculator.buttonEqualsPressed = false;
             calculator.buttonOperationPressed = false;
         }
 
