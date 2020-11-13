@@ -30,6 +30,8 @@ public class Display implements View.OnClickListener {
             removeOneDigit();
         } else if (buttonID == R.id.clear) {
             clearScreen();
+        } else if (buttonID == R.id.clearAll) {
+            clearAll();
         } else {
             CharSequence cs = button.getText();
             screenController(cs);
@@ -105,6 +107,12 @@ public class Display implements View.OnClickListener {
 
     public void clearScreen() {
         writeOnMainScreen("");
+    }
+
+    public void clearAll() {
+        writeOnMainScreen("");
+        writeOnSecondaryScreen("");
+        calculator.resetValues();
     }
 
     public boolean isEmptyScreen() {

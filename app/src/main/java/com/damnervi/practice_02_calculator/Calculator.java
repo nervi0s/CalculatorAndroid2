@@ -120,7 +120,7 @@ public class Calculator implements View.OnClickListener {
         }
     }
 
-    private void resetValues() {
+    public void resetValues() {
         inScreenNumber = null;
         waitingNumber = null;
         operation = null;
