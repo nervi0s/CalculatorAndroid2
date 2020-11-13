@@ -17,8 +17,9 @@
     <string name="minus">-</string>
     <string name="multi">X</string>
     <string name="divide">/</string>
-    <string name="remove">r</string>
+    <string name="remove">R</string>
     <string name="clear">C</string>
+    <string name="clear_all">CA</string>
     <string name="result">=</string>
 
 </resources>
